@@ -29,4 +29,7 @@ public class Attachment extends AbstractEntity{
     @Column(name = "content_type")
     private String contentType;
     private String extension;
+
+    @OneToOne(mappedBy = "image")
+    private Ad ad;
 }

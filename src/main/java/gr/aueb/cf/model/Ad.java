@@ -24,22 +24,29 @@ public class Ad extends AbstractEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(nullable = false)
     private String title;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "city_id")
+    @JoinColumn(name = "city_id", nullable = false)
     private City city;
 
     @Enumerated(EnumType.STRING)
     private Condition condition;
+
 
     private BigDecimal price;
 
     private boolean isAvailable;
 
     private String description;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "attachment_id")
+    private Attachment image;
 }
