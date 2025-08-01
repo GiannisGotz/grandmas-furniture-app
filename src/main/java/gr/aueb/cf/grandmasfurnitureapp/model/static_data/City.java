@@ -1,7 +1,6 @@
-package gr.aueb.cf.model.static_data;
+package gr.aueb.cf.grandmasfurnitureapp.model.static_data;
 
-
-import gr.aueb.cf.model.AbstractEntity;
+import gr.aueb.cf.grandmasfurnitureapp.model.AbstractEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,13 +12,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "categories")
-public class Category extends AbstractEntity {
+@Table(name = "cities")
+public class City extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column ( unique = true, nullable = false)
-    private String category;
+
+    @Column(unique = true, nullable = false)
+    private String cityName;
+
 }

@@ -1,4 +1,4 @@
-package gr.aueb.cf.core.enums;
+package gr.aueb.cf.grandmasfurnitureapp.core.enums;
 
 public enum Condition {
     EXCELLENT,

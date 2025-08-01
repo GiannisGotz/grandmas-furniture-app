@@ -1,4 +1,4 @@
-package gr.aueb.cf.model;
+package gr.aueb.cf.grandmasfurnitureapp.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

@@ -1,39 +1,37 @@
 -- Grandma's Furniture App Database Schema
 -- MySQL Database Schema
 
-CREATE DATABASE IF NOT EXISTS grandmas_furniture_app;
-USE grandmas_furniture_app;
+CREATE DATABASE IF NOT EXISTS grandmas_furniture_app
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_0900_ai_ci;
+USE grandmasfurnitureappDB;
 
 -- Drop tables if they exist (in reverse order of dependencies)
 DROP TABLE IF EXISTS ads;
-DROP TABLE IF EXISTS attachment;
+DROP TABLE IF EXISTS attachments;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS cities;
 DROP TABLE IF EXISTS categories;
 
 -- Categories table (static data)
 CREATE TABLE categories (
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    category VARCHAR(255) UNIQUE NOT NULL
-);
+    category VARCHAR(255) UNIQUE NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
 -- Cities table (static data)
 CREATE TABLE cities (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    city_name VARCHAR(255) UNIQUE NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON  UPDATE CURRENT_TIMESTAMP,
-    id BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    city_name VARCHAR(255) UNIQUE NOT NULL
-    
-);
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
 -- Users table
-CREATE TABLE users (    
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    id BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+CREATE TABLE users (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     first_name VARCHAR(255) NOT NULL,
@@ -41,12 +39,14 @@ CREATE TABLE users (
     email VARCHAR(255) UNIQUE NOT NULL,
     phone VARCHAR(255) NOT NULL,
     role ENUM('USER', 'ADMIN') DEFAULT 'USER',
-    is_active BOOLEAN DEFAULT TRUE
-);
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
--- Attachment table (created first due to foreign key dependency)
-CREATE TABLE attachment (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+-- Attachments table
+CREATE TABLE attachments (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     filename VARCHAR(255),
     saved_name VARCHAR(255),
     file_path VARCHAR(500),
@@ -54,29 +54,31 @@ CREATE TABLE attachment (
     extension VARCHAR(10),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
 -- Ads table
 CREATE TABLE ads (
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    id BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    title VARCHAR(255),
-    category_id BIGINT,
-    city_id BIGINT,
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    category_id BIGINT NOT NULL,
+    city_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL,
     condition ENUM('EXCELLENT', 'GOOD', 'AGE_WORN', 'DAMAGED'),
     price DECIMAL(10,2),
     is_available BOOLEAN DEFAULT TRUE,
     description TEXT,
     attachment_id BIGINT UNIQUE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     
     CONSTRAINT fk_ads_category FOREIGN KEY (category_id) REFERENCES categories(id),
     CONSTRAINT fk_ads_city FOREIGN KEY (city_id) REFERENCES cities(id),
-    CONSTRAINT fk_ads_attachment FOREIGN KEY (attachment_id) REFERENCES attachment(id)
-);
+    CONSTRAINT fk_ads_user FOREIGN KEY (user_id) REFERENCES users(id),
+    CONSTRAINT fk_ads_attachment FOREIGN KEY (attachment_id) REFERENCES attachments(id)
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
-
-INSERT INTO categories (category) VALUES
+-- Insert sample categories
+INSERT INTO categories (category) VALUES 
 ('Chairs'),
 ('Tables'),
 ('Cabinets'),
@@ -90,7 +92,8 @@ INSERT INTO categories (category) VALUES
 ('Antique Clocks'),
 ('Decorative Items');
 
-INSERT INTO cities (city_name) VALUES
+-- Insert sample cities
+INSERT INTO cities (city_name) VALUES 
 ('Athens'),
 ('Piraeus'),
 ('Marousi'),
@@ -98,43 +101,14 @@ INSERT INTO cities (city_name) VALUES
 ('Nea Smyrni'),
 ('Glyfada'),
 ('Chalandri'),
-('Peristeri'),
-('Pallini'),
-('Voula'),
-('Elefsina'),
-('Kalamata'),
-('Patras'),
 ('Thessaloniki'),
-('Larissa'),
-('Volos'),
-('Ioannina'),
-('Chania'),
-('Heraklion'),
-('Rhodes'),
-('Irakleio'),
-('Corfu'),
-('Agrinio'),
-('Serres'),
-('Kavala'),
-('Alexandroupoli'),
-('Tripoli'),
-('Trikala'),
-('Katerini'),
-('Rethymno'),
-('Nafplio'),
-('Sparta'),
-('Kalambaka'),
-('Loutraki'),
-('Edessa'),
-('Preveza'),
-('Zakynthos'),
-('Mykonos'),
-('Santorini'),
-('Naxos');
+('Patras'),
+('Heraklion');
 
 -- Create indexes for better performance
 CREATE INDEX idx_ads_category ON ads(category_id);
 CREATE INDEX idx_ads_city ON ads(city_id);
+CREATE INDEX idx_ads_user ON ads(user_id);
 CREATE INDEX idx_ads_available ON ads(is_available);
 CREATE INDEX idx_ads_attachment ON ads(attachment_id);
 CREATE INDEX idx_users_username ON users(username);

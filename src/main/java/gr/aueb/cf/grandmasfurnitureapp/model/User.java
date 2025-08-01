@@ -1,6 +1,6 @@
-package gr.aueb.cf.model;
+package gr.aueb.cf.grandmasfurnitureapp.model;
 
-import gr.aueb.cf.core.enums.Role;
+import gr.aueb.cf.grandmasfurnitureapp.core.enums.Role;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

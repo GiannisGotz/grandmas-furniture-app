@@ -1,9 +1,9 @@
-package gr.aueb.cf.model;
+package gr.aueb.cf.grandmasfurnitureapp.model;
 
 
-import gr.aueb.cf.core.enums.Condition;
-import gr.aueb.cf.model.static_data.Category;
-import gr.aueb.cf.model.static_data.City;
+import gr.aueb.cf.grandmasfurnitureapp.core.enums.Condition;
+import gr.aueb.cf.grandmasfurnitureapp.model.static_data.Category;
+import gr.aueb.cf.grandmasfurnitureapp.model.static_data.City;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,9 +39,9 @@ public class Ad extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private Condition condition;
 
-
     private BigDecimal price;
 
+    @Column(name = "is_available")
     private boolean isAvailable;
 
     private String description;
@@ -49,4 +49,8 @@ public class Ad extends AbstractEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "attachment_id")
     private Attachment image;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }

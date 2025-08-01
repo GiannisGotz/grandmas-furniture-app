@@ -1,4 +1,4 @@
-package gr.aueb.cf.model;
+package gr.aueb.cf.grandmasfurnitureapp.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "attachment")
+@Table(name = "attachments")
 public class Attachment extends AbstractEntity{
 
     @Id

@@ -3,7 +3,7 @@
 
 -- Drop tables if they exist (in reverse order of dependencies)
 DROP TABLE IF EXISTS ads;
-DROP TABLE IF EXISTS attachment;
+DROP TABLE IF EXISTS attachments;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS cities;
 DROP TABLE IF EXISTS categories;
@@ -14,7 +14,7 @@ CREATE TABLE categories (
     category VARCHAR(255) UNIQUE NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
 -- Cities table (static data)
 CREATE TABLE cities (
@@ -22,7 +22,7 @@ CREATE TABLE cities (
     city_name VARCHAR(255) UNIQUE NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
 -- Users table
 CREATE TABLE users (
@@ -37,10 +37,10 @@ CREATE TABLE users (
     is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
--- Attachment table (created first due to foreign key dependency)
-CREATE TABLE attachment (
+-- Attachments table
+CREATE TABLE attachments (
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     filename VARCHAR(255),
     saved_name VARCHAR(255),
@@ -49,14 +49,15 @@ CREATE TABLE attachment (
     extension VARCHAR(10),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
 -- Ads table
 CREATE TABLE ads (
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(255),
-    category_id BIGINT,
-    city_id BIGINT,
+    title VARCHAR(255) NOT NULL,
+    category_id BIGINT NOT NULL,
+    city_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL,
     condition ENUM('EXCELLENT', 'GOOD', 'AGE_WORN', 'DAMAGED'),
     price DECIMAL(10,2),
     is_available BOOLEAN DEFAULT TRUE,
@@ -67,34 +68,42 @@ CREATE TABLE ads (
     
     CONSTRAINT fk_ads_category FOREIGN KEY (category_id) REFERENCES categories(id),
     CONSTRAINT fk_ads_city FOREIGN KEY (city_id) REFERENCES cities(id),
-    CONSTRAINT fk_ads_attachment FOREIGN KEY (attachment_id) REFERENCES attachment(id)
-);
+    CONSTRAINT fk_ads_user FOREIGN KEY (user_id) REFERENCES users(id),
+    CONSTRAINT fk_ads_attachment FOREIGN KEY (attachment_id) REFERENCES attachments(id)
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
 -- Insert sample categories
 INSERT INTO categories (category) VALUES 
-('Sofas & Chairs'),
+('Chairs'),
 ('Tables'),
-('Beds & Mattresses'),
-('Storage & Wardrobes'),
-('Lighting'),
-('Decorative Items'),
-('Kitchen Furniture'),
-('Outdoor Furniture');
+('Cabinets'),
+('Sofas'),
+('Desks'),
+('Dressers'),
+('Beds'),
+('Sideboards'),
+('Wardrobes'),
+('Bookcases'),
+('Antique Clocks'),
+('Decorative Items');
 
 -- Insert sample cities
 INSERT INTO cities (city_name) VALUES 
 ('Athens'),
+('Piraeus'),
+('Marousi'),
+('Kifisia'),
+('Nea Smyrni'),
+('Glyfada'),
+('Chalandri'),
 ('Thessaloniki'),
 ('Patras'),
-('Heraklion'),
-('Larissa'),
-('Volos'),
-('Ioannina'),
-('Kavala');
+('Heraklion');
 
 -- Create indexes for better performance
 CREATE INDEX idx_ads_category ON ads(category_id);
 CREATE INDEX idx_ads_city ON ads(city_id);
+CREATE INDEX idx_ads_user ON ads(user_id);
 CREATE INDEX idx_ads_available ON ads(is_available);
 CREATE INDEX idx_ads_attachment ON ads(attachment_id);
 CREATE INDEX idx_users_username ON users(username);
