@@ -1,8 +1,7 @@
-package gr.aueb.cf.grandmasfurnitureapp.core.specifications;
+package gr.aueb.cf.grandmasfurnitureapp.core;
 
 import gr.aueb.cf.grandmasfurnitureapp.core.exceptions.*;
 import gr.aueb.cf.grandmasfurnitureapp.dto.ResponseMessageDTO;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;

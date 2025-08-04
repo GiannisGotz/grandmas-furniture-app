@@ -1,7 +1,7 @@
 package gr.aueb.cf.grandmasfurnitureapp.security;
 
-
 import gr.aueb.cf.grandmasfurnitureapp.authentication.JwtAuthenticationFilter;
+import gr.aueb.cf.grandmasfurnitureapp.core.enums.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +23,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
 import java.util.List;
 
 @Configuration
@@ -44,10 +43,10 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(req -> req
                                 .requestMatchers("/api/ads/save").permitAll()
                                 .requestMatchers("/api/auth/login").permitAll()
-                                .requestMatchers("/api/adds/**").hasAnyAuthority()
-                                 //        (Role.TEACHER.name(), Role.SUPER_ADMIN.name())
-//                      //  .requestMatchers("/**").permitAll()
+                                .requestMatchers("/api/auth/register").permitAll()
+                                .requestMatchers("/api/ads/**").hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
                                 .requestMatchers("/swagger/**").permitAll()
+
                 )
                 .sessionManagement((session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)))
                 .authenticationProvider(authenticationProvider())
@@ -55,6 +54,7 @@ public class SecurityConfiguration {
 
         return http.build();
     }
+
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
