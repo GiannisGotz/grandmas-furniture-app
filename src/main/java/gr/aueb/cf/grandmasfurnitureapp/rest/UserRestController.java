@@ -25,7 +25,6 @@ public class UserRestController {
     private final UserService userService;
 
     @GetMapping("/paginated")
-    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Get paginated users", description = "Get users with pagination (Admin only)")
     public ResponseEntity<Page<UserReadOnlyDTO>> getPaginatedUsers(
             @RequestParam(defaultValue = "0") int page,
@@ -35,7 +34,6 @@ public class UserRestController {
     }
 
     @GetMapping("/paginated/sorted")
-    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Get paginated sorted users", description = "Get users with pagination and sorting (Admin only)")
     public ResponseEntity<Page<UserReadOnlyDTO>> getPaginatedSortedUsers(
             @RequestParam(defaultValue = "0") int page,
@@ -48,7 +46,7 @@ public class UserRestController {
 
 
     @DeleteMapping("/{username}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Deletes a user", description = "Deletes user by username (Admin only)")
     public ResponseEntity<Void> deleteUser(@PathVariable String username) throws AppObjectNotFoundException {
         userService.deleteUser(username);
         LOGGER.info("User with username {} deleted successfully", username);

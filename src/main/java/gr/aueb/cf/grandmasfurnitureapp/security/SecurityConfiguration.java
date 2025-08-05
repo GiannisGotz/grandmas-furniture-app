@@ -41,12 +41,13 @@ public class SecurityConfiguration {
                 .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(myCustomAuthenticationEntryPoint()))
                 .exceptionHandling(exceptions -> exceptions.accessDeniedHandler(myCustomAccessDeniedHandler()))
                 .authorizeHttpRequests(req -> req
-                                .requestMatchers("/api/ads/save").permitAll()
-                                .requestMatchers("/api/auth/login").permitAll()
-                                .requestMatchers("/api/auth/register").permitAll()
-                                .requestMatchers("/api/ads/**").hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
-                                .requestMatchers("/swagger/**").permitAll()
-
+                        .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
+                        // Fixed Swagger configuration
+                        .requestMatchers("/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/v3/api-docs", "/swagger-resources/**", "/webjars/**").permitAll()
+                        .requestMatchers("/api/ads/save").hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
+                        .requestMatchers("/api/ads/**").hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement((session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)))
                 .authenticationProvider(authenticationProvider())
