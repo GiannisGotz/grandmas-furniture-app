@@ -6,6 +6,7 @@ import gr.aueb.cf.grandmasfurnitureapp.dto.AuthenticationRequestDTO;
 import gr.aueb.cf.grandmasfurnitureapp.dto.AuthenticationResponseDTO;
 import gr.aueb.cf.grandmasfurnitureapp.dto.UserInsertDTO;
 import gr.aueb.cf.grandmasfurnitureapp.dto.UserReadOnlyDTO;
+import gr.aueb.cf.grandmasfurnitureapp.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

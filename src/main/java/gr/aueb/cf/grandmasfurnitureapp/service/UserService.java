@@ -9,7 +9,7 @@ import gr.aueb.cf.grandmasfurnitureapp.dto.UserReadOnlyDTO;
 import gr.aueb.cf.grandmasfurnitureapp.mapper.Mapper;
 import gr.aueb.cf.grandmasfurnitureapp.model.User;
 import gr.aueb.cf.grandmasfurnitureapp.repository.UserRepository;
-import gr.aueb.cf.grandmasfurnitureapp.specification.UserSpecification;
+import gr.aueb.cf.grandmasfurnitureapp.core.specifications.UserSpecification;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

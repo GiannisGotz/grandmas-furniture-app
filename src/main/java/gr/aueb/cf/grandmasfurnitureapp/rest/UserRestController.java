@@ -48,6 +48,7 @@ public class UserRestController {
 
 
     @DeleteMapping("/{username}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteUser(@PathVariable String username) throws AppObjectNotFoundException {
         userService.deleteUser(username);
         LOGGER.info("User with username {} deleted successfully", username);
