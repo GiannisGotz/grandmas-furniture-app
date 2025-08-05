@@ -1,6 +1,7 @@
 package gr.aueb.cf.grandmasfurnitureapp.service;
 
 import gr.aueb.cf.grandmasfurnitureapp.core.exceptions.AppObjectAlreadyExists;
+import gr.aueb.cf.grandmasfurnitureapp.core.exceptions.AppObjectNotFoundException;
 import gr.aueb.cf.grandmasfurnitureapp.dto.UserInsertDTO;
 import gr.aueb.cf.grandmasfurnitureapp.dto.UserReadOnlyDTO;
 import gr.aueb.cf.grandmasfurnitureapp.mapper.Mapper;
@@ -14,6 +15,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -56,14 +60,31 @@ public class UserService {
         }
     }
 
+    /**
+     * Delete user
+     * @param username
+     * @throws AppObjectNotFoundException
+     */
     @Transactional
-    public void deleteUser(String username) throws AppObjectAlreadyExists {
+    public void deleteUser(String username) throws AppObjectNotFoundException {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new AppObjectAlreadyExists("User", "User with username: " + username + " not found"));
+                .orElseThrow(() -> new AppObjectNotFoundException("User", "User with username: " + username + " not found"));
 
         // Perform user deletion
         userRepository.delete(user);
         LOGGER.info("User with username {} successfully deleted", username);
+    }
+
+    /**
+     * @return all Users
+     */
+    public List<UserReadOnlyDTO> getAllUsers() {
+        LOGGER.info("Getting all users");
+        return userRepository.findAll()
+                .stream()
+                .map(mapper::mapToUserReadOnlyDTO)
+                .collect(Collectors.toList());
+
     }
 
 }
