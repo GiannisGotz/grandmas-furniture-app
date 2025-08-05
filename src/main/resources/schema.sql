@@ -4,7 +4,7 @@
 CREATE DATABASE IF NOT EXISTS grandmas_furniture_app
 CHARACTER SET utf8mb4
 COLLATE utf8mb4_0900_ai_ci;
-USE grandmasfurnitureappDB;
+USE grandmas_furniture_app;
 
 -- Drop tables if they exist (in reverse order of dependencies)
 DROP TABLE IF EXISTS ads;

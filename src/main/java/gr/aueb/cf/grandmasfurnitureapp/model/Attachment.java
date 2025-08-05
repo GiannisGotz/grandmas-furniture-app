@@ -18,12 +18,13 @@ public class Attachment extends AbstractEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "filename")
     private String imageName;
 
     @Column(name = "saved_name")
     private String savedName;
 
-    @Column(name = "image_path")
+    @Column(name = "file_path")
     private String imagePath;
 
     @Column(name = "content_type")

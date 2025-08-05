@@ -37,5 +37,4 @@ public class AdReadOnlyDTO {
 
     private LocalDateTime updatedAt;
 
-
 }

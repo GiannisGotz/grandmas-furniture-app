@@ -53,9 +53,16 @@ public class User extends  AbstractEntity implements UserDetails {
     @Column(name = "is_active")
     private Boolean isActive;
 
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return List.of(
+//                new SimpleGrantedAuthority("ROLE_" + this.role.name())
+//        );
+//    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override

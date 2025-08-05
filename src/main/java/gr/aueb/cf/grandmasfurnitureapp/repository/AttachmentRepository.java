@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface AttachmentRepository extends JpaRepository<Attachment, Long>, JpaSpecificationExecutor<Attachment> {
 
-    Optional<Attachment> findByAdId(long id);
+    Optional<Attachment> findByAdId(Long id);
 }

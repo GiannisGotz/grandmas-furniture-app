@@ -36,6 +36,7 @@ public class Mapper {
         Ad ad = new Ad();
         ad.setTitle(dto.getTitle());
         ad.setCategory(dto.getCategory());
+        ad.setCity(dto.getCity());
         ad.setCondition(dto.getCondition());
         ad.setPrice(dto.getPrice());
         ad.setAvailable(dto.isAvailable());

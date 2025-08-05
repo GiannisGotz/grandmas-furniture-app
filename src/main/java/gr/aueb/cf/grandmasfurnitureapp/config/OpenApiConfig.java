@@ -1,4 +1,4 @@
-package gr.aueb.cf.grandmasfurnitureapp.authentication;
+package gr.aueb.cf.grandmasfurnitureapp.config;
 
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
@@ -22,9 +22,9 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("School API")
+                        .title("Grandma's Furniture API")
                         .version("1.0.0")
-                        .description("Provides API for Schools with teachers")
+                        .description("API for buying and selling old and antique furniture")
                         .contact(new Contact()
                                 .name("Giannis")
                                 .email("mathsgotzaridis@yahoo.gr")

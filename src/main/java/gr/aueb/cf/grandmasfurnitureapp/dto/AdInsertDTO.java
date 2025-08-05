@@ -3,6 +3,7 @@ package gr.aueb.cf.grandmasfurnitureapp.dto;
 
 import gr.aueb.cf.grandmasfurnitureapp.core.enums.Condition;
 import gr.aueb.cf.grandmasfurnitureapp.model.static_data.Category;
+import gr.aueb.cf.grandmasfurnitureapp.model.static_data.City;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -26,6 +27,9 @@ public class AdInsertDTO {
 
     @NotNull(message = "Category  is required.")
     private Category category;
+
+    @NotNull(message = "City is required.")
+    private City city;
 
     @NotNull(message = "Condition is required.")
     private Condition condition;

@@ -16,6 +16,7 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
+
     //    private String secretKey = System.getenv("SECRET_KEY");
 //    private String secretKey = "FvArDZiJ1hvR9k3Ks1J6s8FqbmL6rRnlmTL5J3jNiT8";
 
@@ -31,7 +32,7 @@ public class JwtService {
         claims.put("role", role);
         return Jwts
                 .builder()
-                .setIssuer("self") // todo
+                .setIssuer("self")
                 .setClaims(claims)
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
