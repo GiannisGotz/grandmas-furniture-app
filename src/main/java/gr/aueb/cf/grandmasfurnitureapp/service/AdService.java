@@ -33,8 +33,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Service for managing furniture ads.
- * Handles ad business logic and delegates file operations to AttachmentService.
+ * Service for ad management operations.
+ * Handles CRUD operations for furniture ads with image attachment support.
  */
 @Service
 @RequiredArgsConstructor
@@ -208,8 +208,44 @@ public class AdService {
 
     @Transactional
     public Paginated<AdReadOnlyDTO> getAdsFilteredPaginated(AdFilters filters) {
-        var filtered = adRepository.findAll(getSpecsFromFilters(filters), filters.getPageable());
-        return new Paginated<>(filtered.map(mapper::mapToAdReadOnlyDTO));
+        LOGGER.info("getAdsFilteredPaginated called with filters: {}", filters);
+        
+        try {
+            // Ensure filters is not null
+            if (filters == null) {
+                LOGGER.warn("Filters is null, creating default filters");
+                filters = AdFilters.builder().build();
+            }
+            
+            // Debug the filters object
+            LOGGER.info("Filters page: {}, pageSize: {}, sortDirection: {}, sortBy: {}", 
+                       filters.getPage(), filters.getPageSize(), filters.getSortDirection(), filters.getSortBy());
+            
+            // Ensure pageable is valid
+            Pageable pageable = filters.getPageable();
+            LOGGER.info("Pageable object: {}", pageable);
+            
+            if (pageable == null) {
+                LOGGER.error("Pageable is null! Creating default pageable");
+                pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+            } else {
+                LOGGER.info("Using pageable: page={}, size={}, sort={}", 
+                           pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
+            }
+            
+            // Create specification
+            Specification<Ad> spec = getSpecsFromFilters(filters);
+            LOGGER.info("Created specification for filtering");
+            
+            // Execute query
+            var filtered = adRepository.findAll(spec, pageable);
+            LOGGER.info("Found {} filtered results", filtered.getTotalElements());
+            
+            return new Paginated<>(filtered.map(mapper::mapToAdReadOnlyDTO));
+        } catch (Exception e) {
+            LOGGER.error("Error in getAdsFilteredPaginated: {}", e.getMessage(), e);
+            throw new RuntimeException("Failed to get paginated filtered ads", e);
+        }
     }
 
     private Specification<Ad> getSpecsFromFilters(AdFilters filters) {

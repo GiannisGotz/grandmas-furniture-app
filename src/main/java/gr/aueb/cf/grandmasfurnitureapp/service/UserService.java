@@ -27,6 +27,10 @@ import org.springframework.validation.BindingResult;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Service for user management operations.
+ * Handles user registration, retrieval, and filtering with pagination support.
+ */
 @Service
 @RequiredArgsConstructor
 public class UserService {

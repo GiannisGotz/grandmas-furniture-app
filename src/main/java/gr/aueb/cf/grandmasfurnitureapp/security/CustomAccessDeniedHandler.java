@@ -8,6 +8,10 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 
 import java.io.IOException;
 
+/**
+ * Custom access denied handler for unauthorized requests.
+ * Returns standardized JSON error responses for authorization failures.
+ */
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override

@@ -8,6 +8,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Category entity for furniture categorization.
+ * Represents different types of furniture categories.
+ */
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor

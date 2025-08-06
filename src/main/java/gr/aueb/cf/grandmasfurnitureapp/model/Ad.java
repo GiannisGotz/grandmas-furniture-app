@@ -12,6 +12,10 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
+/**
+ * Ad entity representing furniture advertisements.
+ * Contains ad details, pricing, and relationships to categories, cities, and users.
+ */
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor

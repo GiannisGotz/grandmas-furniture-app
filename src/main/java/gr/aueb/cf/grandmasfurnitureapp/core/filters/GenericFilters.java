@@ -7,6 +7,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+/**
+ * Abstract base class for filter criteria with pagination support.
+ * Provides common pagination and sorting functionality for all filter classes.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,7 +29,7 @@ public abstract class GenericFilters {
     }
 
     public int getPageSize() {
-        return pageSize < 0 ? DEFAULT_PAGE_SIZE : pageSize;
+        return pageSize <= 0 ? DEFAULT_PAGE_SIZE : pageSize;
     }
 
     public Sort.Direction getSortDirection() {

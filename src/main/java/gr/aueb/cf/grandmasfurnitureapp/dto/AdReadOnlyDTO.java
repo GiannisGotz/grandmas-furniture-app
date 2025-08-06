@@ -9,6 +9,10 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * DTO for ad data retrieval operations.
+ * Contains read-only ad information with nested category and city DTOs.
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

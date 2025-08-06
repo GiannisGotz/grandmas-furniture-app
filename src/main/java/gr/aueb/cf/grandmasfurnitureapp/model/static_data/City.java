@@ -7,6 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * City entity for location data.
+ * Represents cities where furniture ads can be posted.
+ */
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor

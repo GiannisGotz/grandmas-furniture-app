@@ -6,6 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Attachment entity for file storage metadata.
+ * Manages file information and relationships to ads.
+ */
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor

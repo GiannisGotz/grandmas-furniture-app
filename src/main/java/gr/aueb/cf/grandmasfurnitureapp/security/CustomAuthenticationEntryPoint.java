@@ -8,6 +8,10 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 
 import java.io.IOException;
 
+/**
+ * Custom authentication entry point for unauthorized requests.
+ * Returns standardized JSON error responses for authentication failures.
+ */
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override

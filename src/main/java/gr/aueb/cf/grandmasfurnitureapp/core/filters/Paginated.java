@@ -6,6 +6,10 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
+/**
+ * Generic wrapper for paginated data responses.
+ * Contains pagination metadata and data list for API responses.
+ */
 @Getter
 @Setter
 public class Paginated<T> {

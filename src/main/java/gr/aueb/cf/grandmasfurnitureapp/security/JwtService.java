@@ -13,6 +13,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.function.Function;
 
+/**
+ * Service for JWT token operations.
+ * Handles token generation, validation, and claim extraction for authentication.
+ */
 @Service
 public class JwtService {
 

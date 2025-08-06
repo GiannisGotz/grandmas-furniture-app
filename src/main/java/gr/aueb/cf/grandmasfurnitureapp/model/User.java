@@ -15,6 +15,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * User entity representing application users.
+ * Implements UserDetails for Spring Security integration.
+ */
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor

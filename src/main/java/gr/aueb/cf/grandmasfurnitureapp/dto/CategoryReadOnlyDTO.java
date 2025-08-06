@@ -5,6 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * DTO for category data retrieval operations.
+ * Contains read-only category information for API responses.
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

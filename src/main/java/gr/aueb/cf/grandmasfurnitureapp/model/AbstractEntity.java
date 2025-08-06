@@ -13,6 +13,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
+/**
+ * Abstract base entity providing audit fields.
+ * Includes creation and modification timestamps for all entities.
+ */
 @MappedSuperclass
 @Getter
 @Setter

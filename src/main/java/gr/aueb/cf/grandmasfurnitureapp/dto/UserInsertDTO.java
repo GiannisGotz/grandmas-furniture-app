@@ -13,6 +13,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
+/**
+ * DTO for user registration data transfer.
+ * Contains validation annotations for user input validation.
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

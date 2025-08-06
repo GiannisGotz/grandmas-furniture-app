@@ -5,6 +5,10 @@ import org.springframework.data.domain.Pageable;
 import jakarta.annotation.Nullable;
 import lombok.*;
 
+/**
+ * Filter criteria for user search operations.
+ * Contains optional filters for user attributes and status.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -34,6 +38,4 @@ public class UserFilters extends GenericFilters {
     @Nullable
     private Boolean isActive;
 
-    @Nullable
-    private Pageable pageable;
 }

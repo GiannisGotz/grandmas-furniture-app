@@ -10,6 +10,10 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
+/**
+ * DTO for ad update operations.
+ * Contains partial ad data for updating existing advertisements.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

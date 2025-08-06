@@ -3,10 +3,13 @@ package gr.aueb.cf.grandmasfurnitureapp.core.filters;
 import gr.aueb.cf.grandmasfurnitureapp.core.enums.Condition;
 import jakarta.annotation.Nullable;
 import lombok.*;
-import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 
+/**
+ * Filter criteria for ad search operations.
+ * Contains optional filters for title, category, price range, location, and availability.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,7 +17,6 @@ import java.math.BigDecimal;
 @ToString
 @Builder
 public class AdFilters extends GenericFilters {
-
 
     @Nullable
     private String title;
@@ -48,7 +50,4 @@ public class AdFilters extends GenericFilters {
 
     @Nullable
     private String description;
-
-    @Nullable
-    private Pageable pageable;
 }
