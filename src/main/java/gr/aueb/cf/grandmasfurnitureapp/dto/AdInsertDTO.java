@@ -2,8 +2,6 @@ package gr.aueb.cf.grandmasfurnitureapp.dto;
 
 
 import gr.aueb.cf.grandmasfurnitureapp.core.enums.Condition;
-import gr.aueb.cf.grandmasfurnitureapp.model.static_data.Category;
-import gr.aueb.cf.grandmasfurnitureapp.model.static_data.City;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -25,11 +23,13 @@ public class AdInsertDTO {
     @Size(min = 2, max = 30, message = "Title must be between 2 and 30 characters.")
     private String title;
 
-    @NotNull(message = "Category  is required.")
-    private Category category;
+    @NotNull(message = "Category name is required.")
+    @NotBlank(message = "Category name cannot be empty.")
+    private String categoryName;
 
-    @NotNull(message = "City is required.")
-    private City city;
+    @NotNull(message = "City name is required.")
+    @NotBlank(message = "City name cannot be empty.")
+    private String cityName;
 
     @NotNull(message = "Condition is required.")
     private Condition condition;
@@ -38,7 +38,7 @@ public class AdInsertDTO {
     private BigDecimal price;
 
     @NotNull(message= "Availability is required.")
-    private boolean isAvailable;
+    private Boolean isAvailable;
 
     @NotNull(message= "Description is required.")
     @NotBlank(message = "Description cannot be empty.")  // Also checks for empty strings

@@ -2,6 +2,8 @@ package gr.aueb.cf.grandmasfurnitureapp.rest;
 
 import gr.aueb.cf.grandmasfurnitureapp.core.exceptions.AppObjectInvalidArgumentException;
 import gr.aueb.cf.grandmasfurnitureapp.core.exceptions.AppObjectNotFoundException;
+import gr.aueb.cf.grandmasfurnitureapp.core.exceptions.AppObjectNotAuthorizedException;
+import gr.aueb.cf.grandmasfurnitureapp.core.exceptions.AppServerException;
 import gr.aueb.cf.grandmasfurnitureapp.core.exceptions.ValidationException;
 import gr.aueb.cf.grandmasfurnitureapp.core.filters.AdFilters;
 import gr.aueb.cf.grandmasfurnitureapp.core.filters.Paginated;
@@ -10,6 +12,7 @@ import gr.aueb.cf.grandmasfurnitureapp.dto.AdReadOnlyDTO;
 import gr.aueb.cf.grandmasfurnitureapp.dto.ResponseMessageDTO;
 import gr.aueb.cf.grandmasfurnitureapp.model.User;
 import gr.aueb.cf.grandmasfurnitureapp.service.AdService;
+import io.jsonwebtoken.io.IOException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -31,7 +34,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.util.List;
+import gr.aueb.cf.grandmasfurnitureapp.core.enums.Condition;
+import jakarta.annotation.Nullable;
 
 /**
  * REST Controller for managing furniture ads.
@@ -51,41 +57,67 @@ public class AdRestController {
      * Creates a new ad with optional image.
      * Accepts multipart form data with ad JSON and image file.
      */
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(summary = "Create new ad", description = "Creates a new furniture ad with optional image upload")
+
+    @Operation(summary = "Create new ad with image", description = "Creates a new furniture ad with optional image upload. Use multipart form data with 'ad' field containing JSON and 'image' field containing the image file.")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Ad created successfully",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = AdReadOnlyDTO.class))),
             @ApiResponse(responseCode = "400", description = "Invalid input data",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(example = "{\"title\": \"Title is required\", \"price\": \"Price must be positive\"}"))),
+                            schema = @Schema(example = "{\"title\": \"Title is required\", \"categoryName\": \"Category name is required\", \"cityName\": \"City name is required\", \"price\": \"Price must be positive\"}"))),
             @ApiResponse(responseCode = "401", description = "Unauthorized",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(example = "{\"code\": \"userNotAuthenticated\", \"description\": \"User must authenticate\"}"))),
+            @ApiResponse(responseCode = "415", description = "Unsupported Media Type - Make sure 'ad' field has Content-Type: application/json",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
+    @PostMapping(
+            path  = "/save",
+            consumes = {
+                    MediaType.MULTIPART_FORM_DATA_VALUE,
+            }
+    )
     public ResponseEntity<AdReadOnlyDTO> createAd(
             @AuthenticationPrincipal User user,
-            @Parameter(description = "Ad data as JSON")
-            @RequestPart("ad") @Valid AdInsertDTO adDto,
-            @Parameter(description = "Image file (optional)")
-            @RequestPart(value = "image", required = false) MultipartFile image,
-            BindingResult bindingResult)
-            throws AppObjectNotFoundException, ValidationException, AppObjectInvalidArgumentException {
 
+            @Parameter(description = "Ad data as JSON string", 
+                      example = "{\"title\":\"Vintage Oak Chair\",\"description\":\"Beautiful antique chair\",\"price\":150.00,\"categoryName\":\"Chairs\",\"cityName\":\"Athens\",\"condition\":\"GOOD\",\"isAvailable\":true}")
+            @RequestPart("ad")
+            @Valid AdInsertDTO adInsertDTO,
+
+            BindingResult bindingResult,
+
+            @Parameter(description = "Image file (optional) - Supported formats: JPG, PNG, GIF")
+            @RequestPart(value = "image", required = false)
+            MultipartFile image
+    )
+            throws AppObjectNotFoundException,
+            ValidationException,
+            AppObjectInvalidArgumentException,
+            AppServerException
+    {
         LOGGER.info("Creating ad request from user: {}", user.getUsername());
 
         if (bindingResult.hasErrors()) {
             throw new ValidationException(bindingResult);
         }
 
-        AdReadOnlyDTO createdAd = adService.createAd(user, adDto, image);
-        LOGGER.info("Ad created successfully with ID: {}", createdAd.getId());
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdAd);
+        try {
+            AdReadOnlyDTO createdAd = adService.createAd(user, adInsertDTO, image);
+            LOGGER.info("Ad created successfully with ID: {}", createdAd.getId());
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdAd);
+        } catch (IOException e) {
+            throw new AppServerException("Attachment", "Attachment cannot get uploaded");
+        }
     }
+
+
+
+
+
 
     /**
      * Updates an existing ad with optional image replacement.
@@ -98,7 +130,7 @@ public class AdRestController {
                             schema = @Schema(implementation = AdReadOnlyDTO.class))),
             @ApiResponse(responseCode = "400", description = "Invalid input data",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(example = "{\"title\": \"Title is required\", \"price\": \"Price must be positive\"}"))),
+                            schema = @Schema(example = "{\"title\": \"Title is required\", \"categoryName\": \"Category name is required\", \"cityName\": \"City name is required\", \"price\": \"Price must be positive\"}"))),
             @ApiResponse(responseCode = "404", description = "Ad not found",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(example = "{\"code\": \"adNotFound\", \"description\": \"Ad with ID not found\"}"))),
@@ -110,7 +142,7 @@ public class AdRestController {
     })
     public ResponseEntity<AdReadOnlyDTO> updateAd(
             @Parameter(description = "Ad ID") @PathVariable Long id,
-            @Parameter(description = "Updated ad data as JSON")
+            @Parameter(description = "Updated ad data as JSON", example = "{\"title\":\"Updated Vintage Chair\",\"description\":\"Updated description\",\"price\":175.00,\"categoryName\":\"Furniture\",\"cityName\":\"Athens\",\"condition\":\"EXCELLENT\",\"isAvailable\":true}")
             @RequestPart("ad") @Valid AdInsertDTO adDto,
             @Parameter(description = "New image file (optional)")
             @RequestPart(value = "image", required = false) MultipartFile image,
@@ -240,72 +272,55 @@ public class AdRestController {
     /**
      * Gets filtered ads with advanced search.
      */
-    @GetMapping("/search")
+    @PostMapping("/search")
     @Operation(summary = "Search ads", description = "Advanced ad search with filters")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Filtered ads retrieved successfully",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(type = "array", implementation = AdReadOnlyDTO.class)))
+                            schema = @Schema(type = "array", implementation = AdReadOnlyDTO.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(example = "{\"code\": \"userNotAuthenticated\", \"description\": \"User must authenticate\"}"))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
     public ResponseEntity<List<AdReadOnlyDTO>> searchAds(
-            @Parameter(description = "Ad title filter")
-            @RequestParam(required = false) String title,
-            @Parameter(description = "Category ID filter")
-            @RequestParam(required = false) Long categoryId,
-            @Parameter(description = "Category name filter")
-            @RequestParam(required = false) String categoryName,
-            @Parameter(description = "Condition filter")
-            @RequestParam(required = false) String condition,
-            @Parameter(description = "Minimum price")
-            @RequestParam(required = false) String minPrice,
-            @Parameter(description = "Maximum price")
-            @RequestParam(required = false) String maxPrice,
-            @Parameter(description = "City ID filter")
-            @RequestParam(required = false) Long cityId,
-            @Parameter(description = "City name filter")
-            @RequestParam(required = false) String cityName,
-            @Parameter(description = "User ID filter")
-            @RequestParam(required = false) Long userId,
-            @Parameter(description = "Availability filter")
-            @RequestParam(required = false) Boolean isAvailable,
-            @Parameter(description = "Description filter")
-            @RequestParam(required = false) String description) {
-
-        // Build filters from request parameters
-        AdFilters filters = AdFilters.builder()
-                .title(title)
-                .categoryId(categoryId)
-                .categoryName(categoryName)
-                .condition(condition != null ?
-                        gr.aueb.cf.grandmasfurnitureapp.core.enums.Condition.valueOf(condition.toUpperCase()) : null)
-                .minPrice(minPrice != null ? new java.math.BigDecimal(minPrice) : null)
-                .maxPrice(maxPrice != null ? new java.math.BigDecimal(maxPrice) : null)
-                .cityId(cityId)
-                .cityName(cityName)
-                .userId(userId)
-                .isAvailable(isAvailable)
-                .description(description)
-                .build();
-
-        List<AdReadOnlyDTO> ads = adService.getAdsFiltered(filters);
-        return ResponseEntity.ok(ads);
+            @Nullable @RequestBody AdFilters filters)
+            throws AppObjectNotFoundException, AppObjectNotAuthorizedException {
+        try {
+            if (filters == null) filters = AdFilters.builder().build();
+            return ResponseEntity.ok(adService.getAdsFiltered(filters));
+        } catch (Exception e) {
+            LOGGER.warn("Could not get ads.", e);
+            throw e;
+        }
     }
 
     /**
      * Gets filtered ads with pagination.
      */
-    @GetMapping("/search/paginated")
+    @PostMapping("/search/paginated")
     @Operation(summary = "Search ads with pagination", description = "Advanced ad search with filters and pagination")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Paginated filtered ads retrieved successfully",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = Paginated.class)))
+                            schema = @Schema(implementation = Paginated.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(example = "{\"code\": \"userNotAuthenticated\", \"description\": \"User must authenticate\"}"))),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
     })
     public ResponseEntity<Paginated<AdReadOnlyDTO>> searchAdsPaginated(
-            @ModelAttribute AdFilters filters) {
-
-        Paginated<AdReadOnlyDTO> ads = adService.getAdsFilteredPaginated(filters);
-        return ResponseEntity.ok(ads);
+            @Nullable @RequestBody AdFilters filters)
+            throws AppObjectNotFoundException, AppObjectNotAuthorizedException {
+        try {
+            if (filters == null) filters = AdFilters.builder().build();
+            return ResponseEntity.ok(adService.getAdsFilteredPaginated(filters));
+        } catch (Exception e) {
+            LOGGER.warn("Could not get ads.", e);
+            throw e;
+        }
     }
 
     /**

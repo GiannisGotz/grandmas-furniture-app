@@ -11,7 +11,11 @@ import gr.aueb.cf.grandmasfurnitureapp.mapper.Mapper;
 import gr.aueb.cf.grandmasfurnitureapp.model.Ad;
 import gr.aueb.cf.grandmasfurnitureapp.model.Attachment;
 import gr.aueb.cf.grandmasfurnitureapp.model.User;
+import gr.aueb.cf.grandmasfurnitureapp.model.static_data.Category;
+import gr.aueb.cf.grandmasfurnitureapp.model.static_data.City;
 import gr.aueb.cf.grandmasfurnitureapp.repository.AdRepository;
+import gr.aueb.cf.grandmasfurnitureapp.repository.CategoryRepository;
+import gr.aueb.cf.grandmasfurnitureapp.repository.CityRepository;
 import gr.aueb.cf.grandmasfurnitureapp.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +44,8 @@ public class AdService {
 
     private final AdRepository adRepository;
     private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
+    private final CityRepository cityRepository;
     private final AttachmentService attachmentService;
     private final Mapper mapper;
 
@@ -222,12 +228,26 @@ public class AdService {
     /**
      * Helper method to update ad fields from DTO.
      */
-    private void updateAdFields(Ad ad, AdInsertDTO dto) {
+    private void updateAdFields(Ad ad, AdInsertDTO dto) throws AppObjectNotFoundException {
         ad.setTitle(dto.getTitle());
-        ad.setCategory(dto.getCategory());
+        
+        // Look up category by name
+        if (dto.getCategoryName() != null) {
+            Category category = categoryRepository.findByCategory(dto.getCategoryName())
+                    .orElseThrow(() -> new AppObjectNotFoundException("Category", "Category not found: " + dto.getCategoryName()));
+            ad.setCategory(category);
+        }
+        
+        // Look up city by name  
+        if (dto.getCityName() != null) {
+            City city = cityRepository.findByCityName(dto.getCityName())
+                    .orElseThrow(() -> new AppObjectNotFoundException("City", "City not found: " + dto.getCityName()));
+            ad.setCity(city);
+        }
+        
         ad.setCondition(dto.getCondition());
         ad.setPrice(dto.getPrice());
-        ad.setAvailable(dto.isAvailable());
+        ad.setIsAvailable(dto.getIsAvailable());
         ad.setDescription(dto.getDescription());
     }
 }

@@ -1,8 +1,6 @@
 package gr.aueb.cf.grandmasfurnitureapp.dto;
 
-
 import gr.aueb.cf.grandmasfurnitureapp.core.enums.Condition;
-import gr.aueb.cf.grandmasfurnitureapp.model.static_data.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,23 +16,21 @@ import java.time.LocalDateTime;
 public class AdReadOnlyDTO {
 
     private Long id;
-
     private String title;
-
-    private Category category;
-
+    private CategoryReadOnlyDTO category;        // Use DTO instead of entity
+    private CityReadOnlyDTO city;               // Use DTO instead of entity
     private Condition condition;
-
     private BigDecimal price;
-
     private Boolean isAvailable;
-
     private String description;
-
     private String imagePath;
 
+    // Only the Ad's audit fields - no duplicates
     private LocalDateTime createdAt;
-
     private LocalDateTime updatedAt;
 
+    // User info (optional - add if you want to show who posted the ad)
+    private String userFirstName;
+    private String userLastName;
+    private String userPhone;
 }

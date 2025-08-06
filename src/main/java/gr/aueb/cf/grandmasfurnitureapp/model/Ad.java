@@ -37,12 +37,13 @@ public class Ad extends AbstractEntity {
     private City city;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "`condition`")
     private Condition condition;
 
     private BigDecimal price;
 
     @Column(name = "is_available")
-    private boolean isAvailable;
+    private Boolean isAvailable;
 
     private String description;
 

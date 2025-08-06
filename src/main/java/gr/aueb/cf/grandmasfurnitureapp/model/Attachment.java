@@ -19,16 +19,17 @@ public class Attachment extends AbstractEntity{
     private Long id;
 
     @Column(name = "filename")
-    private String imageName;
+    private String filename;
 
     @Column(name = "saved_name")
     private String savedName;
 
     @Column(name = "file_path")
-    private String imagePath;
+    private String filePath;
 
     @Column(name = "content_type")
     private String contentType;
+    
     private String extension;
 
     @OneToOne(mappedBy = "image")

@@ -38,9 +38,9 @@ public class AttachmentService {
 
         // Create attachment metadata
         Attachment attachment = new Attachment();
-        attachment.setImageName(file.getOriginalFilename());
+        attachment.setFilename(file.getOriginalFilename());
         attachment.setSavedName("image." + fileService.getFileExtension(file.getOriginalFilename()));
-        attachment.setImagePath(imagePath);
+        attachment.setFilePath(imagePath);
         attachment.setContentType(file.getContentType());
         attachment.setExtension(fileService.getFileExtension(file.getOriginalFilename()));
 
@@ -70,9 +70,9 @@ public class AttachmentService {
         String imagePath = fileService.storeAdImage(newFile, adId);
 
         // Update attachment metadata
-        existingAttachment.setImageName(newFile.getOriginalFilename());
+        existingAttachment.setFilename(newFile.getOriginalFilename());
         existingAttachment.setSavedName("image." + fileService.getFileExtension(newFile.getOriginalFilename()));
-        existingAttachment.setImagePath(imagePath);
+        existingAttachment.setFilePath(imagePath);
         existingAttachment.setContentType(newFile.getContentType());
         existingAttachment.setExtension(fileService.getFileExtension(newFile.getOriginalFilename()));
 
