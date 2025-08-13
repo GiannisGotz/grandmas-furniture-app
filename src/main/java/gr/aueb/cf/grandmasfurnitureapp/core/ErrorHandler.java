@@ -4,6 +4,7 @@ import gr.aueb.cf.grandmasfurnitureapp.core.exceptions.*;
 import gr.aueb.cf.grandmasfurnitureapp.dto.ResponseMessageDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -45,11 +46,19 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({AppObjectNotAuthorizedException.class})
     public ResponseEntity<ResponseMessageDTO> handleConstraintViolationException(AppObjectNotAuthorizedException e) {
-        return new ResponseEntity<>(new ResponseMessageDTO(e.getCode(), e.getMessage()), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(new ResponseMessageDTO(e.getCode(), e.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler({AppServerException.class})
     public ResponseEntity<ResponseMessageDTO> handleConstraintViolationException(AppServerException e) {
         return new ResponseEntity<>(new ResponseMessageDTO(e.getCode(), e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ResponseMessageDTO> handleBadCredentialsException(BadCredentialsException e) {
+        return new ResponseEntity<>(
+            new ResponseMessageDTO("invalidCredentials", "Invalid username or password"), 
+            HttpStatus.UNAUTHORIZED
+        );
     }
 }

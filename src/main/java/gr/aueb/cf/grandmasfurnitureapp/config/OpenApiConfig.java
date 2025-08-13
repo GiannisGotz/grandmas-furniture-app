@@ -48,11 +48,12 @@ public class OpenApiConfig {
     /**
      * Configure MappingJackson2HttpMessageConverter to support application/octet-stream media type.
      * This fixes the Swagger UI multipart request issue where the 'ad' field is sent as application/octet-stream.
+     * It is required for Swagger CreateAd scenario testing.
      */
-    @Bean
-    public MappingJackson2HttpMessageConverter octetStreamJsonConverter() {
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        converter.setSupportedMediaTypes(Arrays.asList(new MediaType("application", "octet-stream")));
-        return converter;
-    }
+//    @Bean
+//    public MappingJackson2HttpMessageConverter octetStreamJsonConverter() {
+//        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+//        converter.setSupportedMediaTypes(Arrays.asList(new MediaType("application", "octet-stream")));
+//        return converter;
+//    }
 }
