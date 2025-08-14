@@ -272,7 +272,7 @@ public class AdRestController {
     /**
      * Gets filtered ads with advanced search.
      */
-    @PostMapping("/search")
+    @GetMapping("/search")
     @Operation(summary = "Search ads", description = "Advanced ad search with filters")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Filtered ads retrieved successfully",

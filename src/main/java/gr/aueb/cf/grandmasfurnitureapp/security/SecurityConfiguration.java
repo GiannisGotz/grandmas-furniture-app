@@ -42,6 +42,7 @@ public class SecurityConfiguration {
                 .exceptionHandling(exceptions -> exceptions.accessDeniedHandler(myCustomAccessDeniedHandler()))
                 .authorizeHttpRequests(req -> req
                         .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
+                        .requestMatchers("/uploads/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/v3/api-docs").permitAll()
                         .requestMatchers("/swagger-resources/**", "/webjars/**").permitAll()

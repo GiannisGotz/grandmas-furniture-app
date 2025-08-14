@@ -42,6 +42,6 @@ public class AdInsertDTO {
 
     @NotNull(message= "Description is required.")
     @NotBlank(message = "Description cannot be empty.")  // Also checks for empty strings
-    @Size(min = 2, max = 100, message = "Title must be between 2 and 100 characters.")
+    @Size(min = 2, max = 100, message = "Description must be between 2 and 100 characters.")
     private String description;
 }
