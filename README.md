@@ -11,12 +11,12 @@ This project consists of two main components:
 
 ```
 grandmas-furniture-app/
-├── grandmas-furniture-app-main/          # Spring Boot Backend
+├── grandmas-furniture-app-backend/       # Spring Boot Backend
 │   ├── src/main/java/                   # Java source code
 │   ├── src/main/resources/              # Configuration files
 │   ├── build.gradle                     # Gradle build configuration
 │   └── README.md                        # Backend documentation
-├── grandmas-furniture-app-frontend-main/ # React Frontend
+├── grandmas-furniture-app-frontend/      # React Frontend
 │   ├── src/                             # React source code
 │   ├── package.json                     # Node.js dependencies
 │   ├── vite.config.ts                   # Vite configuration
@@ -57,7 +57,7 @@ FLUSH PRIVILEGES;
 ### 3. Backend Configuration
 
 ```bash
-cd grandmas-furniture-app-main
+cd grandmas-furniture-app-backend
 
 # Update application.properties with your database credentials
 # Edit: src/main/resources/application.properties
@@ -77,7 +77,7 @@ jwt.expiration=86400000
 ### 4. Start the Backend
 
 ```bash
-cd grandmas-furniture-app-main
+cd grandmas-furniture-app-backend
 ./gradlew bootRun
 ```
 
@@ -86,7 +86,7 @@ The backend will start on `http://localhost:8080`
 ### 5. Frontend Configuration
 
 ```bash
-cd grandmas-furniture-app-frontend-main
+cd grandmas-furniture-app-frontend
 
 # Install dependencies
 npm install
@@ -98,6 +98,7 @@ echo "VITE_API_URL=http://localhost:8080/api" > .env.local
 ### 6. Start the Frontend
 
 ```bash
+cd grandmas-furniture-app-frontend
 npm run dev
 ```
 
@@ -216,7 +217,7 @@ The application features a unified search system that works across all views:
 ### Backend Development
 
 ```bash
-cd grandmas-furniture-app-main
+cd grandmas-furniture-app-backend
 
 # Run with specific profile
 ./gradlew bootRun --args='--spring.profiles.active=dev'
@@ -232,7 +233,7 @@ java -jar build/libs/grandmasfurnitureapp-0.0.1-SNAPSHOT.jar
 ### Frontend Development
 
 ```bash
-cd grandmas-furniture-app-frontend-main
+cd grandmas-furniture-app-frontend
 
 # Development server
 npm run dev
@@ -251,11 +252,11 @@ npm run type-check
 
 ```bash
 # Backend tests
-cd grandmas-furniture-app-main
+cd grandmas-furniture-app-backend
 ./gradlew test
 
 # Frontend tests (if configured)
-cd grandmas-furniture-app-frontend-main
+cd grandmas-furniture-app-frontend
 npm run test
 ```
 
@@ -383,8 +384,8 @@ This project is licensed under the MIT License.
 
 ## 🔗 Quick Links
 
-- **[Backend Documentation](./grandmas-furniture-app-main/README.md)**
-- **[Frontend Documentation](./grandmas-furniture-app-frontend-main/README.md)**
+- **[Backend Documentation](./grandmas-furniture-app-backend/README.md)**
+- **[Frontend Documentation](./grandmas-furniture-app-frontend/README.md)**
 - **API Documentation**: `http://localhost:8080/swagger-ui` (when running)
 - **Frontend App**: `http://localhost:5173` (when running)
 - **Backend API**: `http://localhost:8080/api` (when running)

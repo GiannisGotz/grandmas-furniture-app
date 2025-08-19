@@ -35,7 +35,7 @@ A Spring Boot REST API for buying and selling antique furniture. Users can post 
 ### 1. Clone and Setup
 ```bash
 git clone <repository-url>
-cd grandmas-furniture-app-main
+cd grandmas-furniture-app-backend
 ```
 
 ### 2. Database Configuration
