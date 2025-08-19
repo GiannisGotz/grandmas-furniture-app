@@ -1,0 +1,3 @@
+VITE_API_URL=http://localhost:8080/api
+
+VITE_TENANT_ID=ffe1ce45-6b65-48b0-83f8-7ee0e074f6a
