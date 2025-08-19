@@ -342,40 +342,6 @@ export const adSchema = z.object({
 });
 ```
 
-## 🐛 Troubleshooting
-
-### Common Issues
-
-**API Connection Failed**
-- Verify backend is running on port 8080
-- Check `VITE_API_URL` in environment variables
-- Ensure CORS is properly configured in backend
-- Check browser console for network errors
-
-**Authentication Issues**
-- Clear browser cookies and localStorage
-- Check JWT token expiration in backend
-- Verify user credentials with test accounts
-- Check browser console for auth errors
-
-**Search Not Working**
-- Verify backend search endpoint is accessible
-- Check API response format matches expected schema
-- Ensure all required fields are sent in search request
-- Test with simple filters first
-
-**Build Errors**
-- Run `npm install` to update dependencies
-- Check TypeScript errors with `npm run type-check`
-- Verify all imports and file paths are correct
-- Clear node_modules and reinstall if needed
-
-**Image Upload Issues**
-- Check file size limits in backend configuration
-- Verify multipart form data is properly formatted
-- Ensure backend upload directory has write permissions
-- Check browser console for upload errors
-
 ## 📋 Available Scripts
 
 ```bash
@@ -397,15 +363,7 @@ npm run test         # Run unit tests (if configured)
 - **Enhanced UX**: Clear availability indicators and responsive design
 - **Cleaner Code**: Simplified component logic and better state management
 
-## 🤝 Contributing
 
-1. Follow TypeScript and React best practices
-2. Use existing component patterns and styling
-3. Add proper error handling and loading states
-4. Test on multiple devices and screen sizes
-5. Update documentation for new features
-6. Ensure accessibility standards are met
-7. Add comprehensive error boundaries
 
 ## 📄 License
 

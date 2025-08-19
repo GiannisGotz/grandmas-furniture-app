@@ -13,6 +13,28 @@ A Spring Boot REST API for buying and selling antique furniture. Users can post 
 - **API Documentation**: Comprehensive OpenAPI/Swagger documentation
 - **Role-based Security**: Admin and User roles with appropriate permissions
 
+## 🗄️ Database Setup
+
+### SQL Schema File
+The project includes a complete database setup script:
+```
+src/main/resources/mysql/schema query.sql
+```
+
+This file provides:
+- **Complete database schema** with all tables and relationships
+- **Sample data** including categories, cities, and furniture ads  
+- **Test users** with predefined credentials (admin1/user1: `Cosmote1@`)
+- **Proper indexing** for optimal search performance
+- **Database user creation** with appropriate permissions
+
+### Database Features
+- **MySQL 8.0+** compatibility with UTF-8 support
+- **Optimized indexes** for search and filtering operations
+- **Sample furniture data** (100+ items) for testing
+- **Pre-configured categories** (12 furniture types)
+- **Greek cities** (50+ locations) for realistic testing
+
 ## 🛠️ Technology Stack
 
 - **Java 17** with Spring Boot 3.4.6
@@ -39,6 +61,17 @@ cd grandmas-furniture-app-backend
 ```
 
 ### 2. Database Configuration
+
+#### Option 1: Quick Setup with SQL File (Recommended)
+```bash
+# Connect to MySQL
+mysql -u root -p
+
+# Run the complete database setup script
+source src/main/resources/mysql/schema\ query.sql;
+```
+
+#### Option 2: Manual Setup
 ```bash
 # Create MySQL database
 mysql -u root -p
@@ -48,13 +81,27 @@ GRANT ALL PRIVILEGES ON grandmas_furniture_app.* TO 'furniture_user'@'localhost'
 FLUSH PRIVILEGES;
 ```
 
+**Note:** The SQL file automatically creates:
+- Database: `grandmasfurnitureappdb`
+- User: `Giannis` with password `12345`
+- All tables with proper structure and indexes
+- Sample categories and cities
+- Test users (including admin1/user1 with password `Cosmote1@`)
+- Sample furniture ads (100 items)
+
 ### 3. Application Properties
 Update `src/main/resources/application.properties`:
 ```properties
 # Database Configuration
-spring.datasource.url=jdbc:mysql://localhost:3306/grandmas_furniture_app
-spring.datasource.username=furniture_user
-spring.datasource.password=your_password
+# If using SQL file setup (recommended):
+spring.datasource.url=jdbc:mysql://localhost:3306/grandmasfurnitureappdb
+spring.datasource.username=Giannis
+spring.datasource.password=12345
+
+# If using manual setup:
+# spring.datasource.url=jdbc:mysql://localhost:3306/grandmas_furniture_app
+# spring.datasource.username=furniture_user
+# spring.datasource.password=your_password
 
 # JWT Configuration
 jwt.secret=your_jwt_secret_key_here
@@ -77,8 +124,7 @@ java -jar build/libs/grandmasfurnitureapp-0.0.1-SNAPSHOT.jar
 
 ### 5. Access Points
 - **API Base URL**: `http://localhost:8080/api`
-- **Swagger UI**: `http://localhost:8080/swagger-ui`
-- **Health Check**: `http://localhost:8080/actuator/health`
+- **Swagger UI**: `http://localhost:8080/swagger-ui/index.html`
 
 ## 📚 API Endpoints
 
@@ -91,7 +137,7 @@ java -jar build/libs/grandmasfurnitureapp-0.0.1-SNAPSHOT.jar
 - `GET /api/ads/{id}` - Get ad by ID with full details
 - `POST /api/ads/save` - Create new ad with multipart image upload
 - `PUT /api/ads/{id}` - Update existing ad with image support
-- `DELETE /api/ads/{id}` - Delete ad (owner or admin only)
+- `DELETE /api/ads/{id}` - Delete ad
 - `GET /api/ads/available` - Get all available ads
 - `GET /api/ads/my-ads` - Get current user's ads
 
@@ -100,9 +146,9 @@ java -jar build/libs/grandmasfurnitureapp-0.0.1-SNAPSHOT.jar
 - `POST /api/ads/search/paginated` - **Unified search with pagination and all filters**
 
 ### 👥 User Management
-- `GET /api/users` - Get paginated users (admin only)
+- `GET /api/users` - Get paginated users 
 - `GET /api/users/{id}` - Get user by ID
-- `PUT /api/users/{id}/role` - Update user role (admin only)
+- `PUT /api/users/{id}/role` - Update user role
 
 ## 🔍 Search & Filtering
 
@@ -112,20 +158,23 @@ The `/api/ads/search/paginated` endpoint provides comprehensive filtering:
 ```json
 {
   "title": "vintage chair",
+  "categoryName": "Chairs",
   "cityName": "Athens",
+  "condition": "GOOD",
   "minPrice": 50,
   "maxPrice": 500,
   "isAvailable": true,
   "myAds": false,
   "page": 0,
   "pageSize": 10,
-  "sortBy": "price",
+  "sortBy": "id",
   "sortDirection": "asc"
 }
 ```
 
 ### Filter Options
-- **Text Search**: `title`, `cityName`, `description`
+- **Text Search**: `title`, `categoryName`, `cityName`
+- **Condition Filter**: `condition` (EXCELLENT, GOOD, AGE_WORN, DAMAGED)
 - **Price Range**: `minPrice`, `maxPrice`
 - **Availability**: `isAvailable` (true/false)
 - **User Context**: `myAds` (true for current user's ads only)
@@ -136,6 +185,13 @@ The `/api/ads/search/paginated` endpoint provides comprehensive filtering:
 - **"All Items" Mode**: Shows all marketplace ads
 - **"My Items" Mode**: Automatically filters by authenticated user
 - **Availability Filter**: Optional filter for available/unavailable items
+
+### Available Condition Values
+The `condition` filter accepts these enum values:
+- **EXCELLENT**: Like new condition
+- **GOOD**: Good used condition
+- **AGE_WORN**: Shows signs of age but functional
+- **DAMAGED**: Has visible damage or defects
 
 ## 🔐 Security Features
 
@@ -164,7 +220,6 @@ src/main/java/gr/aueb/cf/grandmasfurnitureapp/
 │   ├── CustomUserDetailsService.java
 │   └── JwtAuthenticationFilter.java
 ├── config/                  # Application configuration
-│   ├── DataInitializer.java
 │   ├── OpenApiConfig.java
 │   └── WebConfig.java
 ├── core/                    # Core components
@@ -196,11 +251,6 @@ src/main/java/gr/aueb/cf/grandmasfurnitureapp/
 ./gradlew test jacocoTestReport
 ```
 
-### Test Scripts
-The project includes PowerShell test scripts for debugging:
-- `test_search_endpoints.ps1` - Test search functionality
-- `test_search_paginated.ps1` - Test paginated search
-- `debug_swagger_issue.ps1` - Debug Swagger UI issues
 
 ## 🚀 Performance Features
 
@@ -242,13 +292,6 @@ The project includes PowerShell test scripts for debugging:
 ./gradlew bootRun --args='-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005'
 ```
 
-## 📊 Monitoring & Health
-
-### Actuator Endpoints
-- `/actuator/health` - Application health status
-- `/actuator/info` - Application information
-- `/actuator/metrics` - Performance metrics
-
 ### Logging
 - Structured logging with SLF4J
 - Configurable log levels
@@ -261,6 +304,7 @@ The project includes PowerShell test scripts for debugging:
 **Database Connection Failed**
 - Verify MySQL service is running
 - Check database credentials in `application.properties`
+- **Quick fix**: Use the SQL file for automatic database setup: `src/main/resources/mysql/schema query.sql`
 - Ensure database exists and user has permissions
 
 **JWT Authentication Issues**
@@ -291,10 +335,4 @@ The project includes PowerShell test scripts for debugging:
 
 This project is licensed under the MIT License.
 
-## 🤝 Contributing
 
-1. Follow Java coding standards
-2. Add comprehensive tests for new features
-3. Update documentation for API changes
-4. Use existing exception handling patterns
-5. Follow the established project structure

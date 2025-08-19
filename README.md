@@ -43,6 +43,16 @@ cd grandmas-furniture-app
 
 ### 2. Database Setup
 
+#### Option 1: Quick Setup with SQL File (Recommended)
+```bash
+# Connect to MySQL
+mysql -u root -p
+
+# Run the complete database setup script
+source grandmas-furniture-app-backend/src/main/resources/mysql/schema\ query.sql;
+```
+
+#### Option 2: Manual Setup
 ```bash
 # Connect to MySQL
 mysql -u root -p
@@ -53,6 +63,14 @@ CREATE USER 'furniture_user'@'localhost' IDENTIFIED BY 'your_password';
 GRANT ALL PRIVILEGES ON grandmas_furniture_app.* TO 'furniture_user'@'localhost';
 FLUSH PRIVILEGES;
 ```
+
+**Note:** The SQL file automatically creates:
+- Database: `grandmasfurnitureappdb`
+- User: `Giannis` with password `12345`
+- All tables with proper structure
+- Sample categories and cities
+- Test users (including admin1/user1 with password `Cosmote1@`)
+- Sample furniture ads
 
 ### 3. Backend Configuration
 
@@ -65,9 +83,15 @@ cd grandmas-furniture-app-backend
 
 ```properties
 # Database Configuration
-spring.datasource.url=jdbc:mysql://localhost:3306/grandmas_furniture_app
-spring.datasource.username=furniture_user
-spring.datasource.password=your_password
+# If using SQL file setup (recommended):
+spring.datasource.url=jdbc:mysql://localhost:3306/grandmasfurnitureappdb
+spring.datasource.username=Giannis
+spring.datasource.password=12345
+
+# If using manual setup:
+# spring.datasource.url=jdbc:mysql://localhost:3306/grandmas_furniture_app
+# spring.datasource.username=furniture_user
+# spring.datasource.password=your_password
 
 # JWT Configuration
 jwt.secret=your_jwt_secret_key_here
@@ -162,7 +186,7 @@ Use these credentials to test the application:
 ### Backend Endpoints
 
 Once the backend is running, access the API documentation at:
-- **Swagger UI**: `http://localhost:8080/swagger-ui`
+- **Swagger UI**: `http://localhost:8080/swagger-ui/index.html`
 - **API Base**: `http://localhost:8080/api`
 
 ### Key API Endpoints
@@ -195,14 +219,16 @@ The application features a unified search system that works across all views:
 ```json
 {
   "title": "vintage chair",
+  "categoryName": "Chairs",
   "cityName": "Athens",
+  "condition": "GOOD",
   "minPrice": 50,
   "maxPrice": 500,
   "isAvailable": true,
   "myAds": false,
   "page": 0,
   "pageSize": 10,
-  "sortBy": "price",
+  "sortBy": "id",
   "sortDirection": "asc"
 }
 ```
@@ -211,6 +237,21 @@ The application features a unified search system that works across all views:
 - **"All Items"**: Browse entire marketplace
 - **"My Items"**: View and manage personal listings
 - **Availability Toggle**: Show all items or only available ones
+
+### Available Filter Options
+- **Text Search**: `title`, `categoryName`, `cityName`
+- **Condition Filter**: `condition` (EXCELLENT, GOOD, AGE_WORN, DAMAGED)
+- **Price Range**: `minPrice`, `maxPrice`
+- **Availability**: `isAvailable` (true/false)
+- **User Context**: `myAds` (true for current user's ads only)
+- **Pagination**: `page`, `pageSize`
+- **Sorting**: `sortBy`, `sortDirection`
+
+### Condition Values
+- **EXCELLENT**: Like new condition
+- **GOOD**: Good used condition  
+- **AGE_WORN**: Shows signs of age but functional
+- **DAMAGED**: Has visible damage or defects
 
 ## 🚀 Development
 
@@ -265,38 +306,69 @@ npm run test
 ### Backend Structure
 ```
 src/main/java/gr/aueb/cf/grandmasfurnitureapp/
-├── authentication/           # JWT authentication
+├── authentication/           # JWT authentication services
 ├── config/                  # Application configuration
 ├── core/                    # Core components
 │   ├── enums/              # Enums (Condition, Role)
 │   ├── exceptions/          # Custom exceptions
-│   ├── filters/             # Search filters
-│   └── specifications/      # JPA specifications
+│   ├── filters/             # Search filters and pagination
+│   └── specifications/      # JPA specifications for filtering
 ├── dto/                     # Data Transfer Objects
-├── mapper/                  # Entity mapping
+├── mapper/                  # Entity-DTO mapping
 ├── model/                   # JPA entities
-├── repository/              # Data access
+│   └── static_data/         # Static data (Category, City)
+├── repository/              # Data access layer
 ├── rest/                    # REST controllers
 ├── security/                # Security configuration
-└── service/                 # Business logic
+└── service/                 # Business logic services
 ```
 
 ### Frontend Structure
 ```
 src/
-├── api/                     # API functions and types
-├── assets/                  # Static assets
-├── components/              # Reusable components
+├── api/                     # API functions, types, and schemas
+│   ├── ads.ts              # Ad-related API calls
+│   ├── auth.ts             # Authentication API
+│   ├── users.ts            # User management API
+│   └── types.ts            # Shared type definitions
+├── assets/                  # Static assets (images, icons, SVGs)
+├── components/              # Reusable UI components
 │   ├── ads/                # Ad-related components
-│   └── ui/                 # UI components
-├── context/                 # React context
-├── hooks/                   # Custom hooks
-├── lib/                     # Utilities
+│   │   ├── AdRowCard.tsx   # Individual ad display
+│   │   ├── AdsTable.tsx    # Paginated ads table
+│   │   └── AdForm.tsx      # Create/edit ad form
+│   ├── ui/                 # shadcn/ui components
+│   ├── Button.tsx          # Custom button component
+│   ├── Header.tsx          # Navigation header
+│   └── Layout.tsx          # Page layout wrapper
+├── context/                 # React context providers
+│   ├── AuthContext.ts      # Authentication state
+│   └── AuthProvider.tsx    # Auth provider component
+├── hooks/                   # Custom React hooks
+│   └── useAuth.ts          # Authentication hook
+├── lib/                     # Utility functions and helpers
 ├── pages/                   # Page components
-└── App.tsx                  # Main app
+│   ├── DashboardAdsPage.tsx # Main dashboard with search
+│   ├── AdPage.tsx          # Individual ad view
+│   ├── LoginPage.tsx       # Authentication page
+│   └── UsersPage.tsx       # User management (admin)
+└── App.tsx                  # Main application component
 ```
 
 ## 🔧 Configuration
+
+### Database Setup Files
+The project includes a complete database setup script located at:
+```
+grandmas-furniture-app-backend/src/main/resources/mysql/schema query.sql
+```
+
+This SQL file contains:
+- **Complete database schema** with all tables and relationships
+- **Sample data** including categories, cities, and furniture ads
+- **Test users** with predefined credentials
+- **Proper indexing** for optimal performance
+- **Database user creation** with appropriate permissions
 
 ### Environment Variables
 
@@ -333,6 +405,7 @@ VITE_LOG_LEVEL=info
 **Backend Won't Start**
 - Verify MySQL is running and accessible
 - Check database credentials in `application.properties`
+- **Use the SQL file for quick database setup**: `grandmas-furniture-app-backend/src/main/resources/mysql/schema query.sql`
 - Ensure Java 17+ is installed and in PATH
 
 **Frontend Can't Connect to Backend**
@@ -370,13 +443,6 @@ VITE_LOG_LEVEL=info
 - **Cleaner Code**: Removed duplicate specifications and simplified logic
 - **Enhanced UX**: Users can see all ads with clear availability indicators
 
-## 🤝 Contributing
-
-1. **Follow Standards**: Use established coding patterns and conventions
-2. **Test Thoroughly**: Add tests for new features and bug fixes
-3. **Document Changes**: Update README files and API documentation
-4. **Error Handling**: Implement proper error handling and user feedback
-5. **Accessibility**: Ensure UI components meet accessibility standards
 
 ## 📄 License
 
@@ -386,18 +452,8 @@ This project is licensed under the MIT License.
 
 - **[Backend Documentation](./grandmas-furniture-app-backend/README.md)**
 - **[Frontend Documentation](./grandmas-furniture-app-frontend/README.md)**
-- **API Documentation**: `http://localhost:8080/swagger-ui` (when running)
+- **API Documentation**: `http://localhost:8080/swagger-ui/index.html`(when running)
 - **Frontend App**: `http://localhost:5173` (when running)
 - **Backend API**: `http://localhost:8080/api` (when running)
-
-## 🆘 Support
-
-If you encounter issues:
-
-1. Check the troubleshooting section above
-2. Review backend logs for errors
-3. Check browser console for frontend issues
-4. Verify all prerequisites are met
-5. Ensure database is properly configured
 
 For additional help, check the individual README files in the backend and frontend directories.
