@@ -1,4 +1,4 @@
-# Grandma's Furniture App  <img src="https://raw.githubusercontent.com/GiannisGotz/grandmas-furniture-app/main/grandmas-furniture-app-frontend/src/assets/grandmalogo.svg" alt="Grandma Logo" width="30">
+# Grandma's Furniture App  <img src="https://raw.githubusercontent.com/GiannisGotz/grandmas-furniture-app/main/grandmas-furniture-app-frontend/src/assets/grandmalogo.svg" alt="Grandma Logo" width="40">
 
 A full-stack furniture marketplace application built with Spring Boot and React. Users can buy, sell, and browse antique furniture with advanced search capabilities, image uploads, and role-based access control.
 
