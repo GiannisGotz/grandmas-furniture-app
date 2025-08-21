@@ -12,6 +12,7 @@ React TypeScript frontend for the furniture marketplace application with unified
 ```bash
 # Using npm
 npm install
+npm install lucide-react@latest
 
 # Using yarn
 yarn install
