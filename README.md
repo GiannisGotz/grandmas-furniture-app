@@ -114,6 +114,7 @@ cd grandmas-furniture-app-frontend
 
 # Install dependencies
 npm install
+npm install lucide-react@latest
 
 # Create environment file
 echo "VITE_API_URL=http://localhost:8080/api" > .env.local
