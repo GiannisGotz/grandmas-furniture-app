@@ -2,6 +2,8 @@
 
 A full-stack furniture marketplace application built with Spring Boot and React. Users can buy, sell, and browse antique furniture with advanced search capabilities, image uploads, and role-based access control.
 
+
+
 ## 🏗️ Architecture Overview
 
 This project consists of two main components:
@@ -106,6 +108,17 @@ cd grandmas-furniture-app-backend
 ```
 
 The backend will start on `http://localhost:8080`
+
+#### Troubleshooting: Missing gradle-wrapper.jar
+
+If you encounter an error about missing `gradle-wrapper.jar`, download it:
+
+```bash
+cd grandmas-furniture-app-backend/gradle/wrapper
+curl -L -o gradle-wrapper.jar https://raw.githubusercontent.com/gradle/gradle/v8.14.3/gradle/wrapper/gradle-wrapper.jar
+```
+
+This downloads the official Gradle wrapper jar for version 8.14.3 (as specified in gradle-wrapper.properties).
 
 ### 5. Frontend Configuration
 
@@ -399,6 +412,35 @@ VITE_DEBUG_MODE=true
 VITE_LOG_LEVEL=info
 ```
 
+## 🖼️ Screenshots
+
+### Home Page
+<img src="./docs/screenshots/home.png" alt="Home page" width="1000">
+
+### Login
+<img src="./docs/screenshots/login.png" alt="Login page" width="1000">
+
+### Marketplace - User
+<img src="./docs/screenshots/marketplace.png" alt="Marketplace listing page" width="1000">
+
+### Marketplace - Admin
+<img src="./docs/screenshots/empty-state.png" alt="No items posted yet state" width="1000">
+
+### Ad Details
+<img src="./docs/screenshots/ad-details.png" alt="Ad details page" width="1000">
+
+### Create & Edit Ad
+<img src="./docs/screenshots/edit-ad.png" alt="Edit ad form" width="1000">
+
+### Users Management
+<img src="./docs/screenshots/users-management.png" alt="Admin users management" width="1000">
+
+### My Items - Empty State
+<img src="./docs/screenshots/my-items.png" alt="My items filtered view" width="1000">
+
+### Logout
+<img src="./docs/screenshots/logout.png" alt="Logout confirmation page" width="1000">
+
 ## 🐛 Troubleshooting
 
 ### Common Issues
@@ -408,6 +450,7 @@ VITE_LOG_LEVEL=info
 - Check database credentials in `application.properties`
 - **Use the SQL file for quick database setup**: `grandmas-furniture-app-backend/src/main/resources/mysql/schema query.sql`
 - Ensure Java 17+ is installed and in PATH
+- **Missing gradle-wrapper.jar**: Download from GitHub (see Start Backend section above)
 
 **Frontend Can't Connect to Backend**
 - Verify backend is running on port 8080
