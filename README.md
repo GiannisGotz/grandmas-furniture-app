@@ -188,11 +188,11 @@ Use these credentials to test the application:
 - **OpenAPI 3** for API documentation
 
 ### Frontend
-- **React 18** with TypeScript
+- **React 19** with TypeScript
 - **Vite** for fast development and building
 - **Tailwind CSS** for utility-first styling
 - **shadcn/ui** for high-quality components
-- **React Router 6** for client-side routing
+- **React Router 7** for client-side routing
 - **Zod** for runtime type validation
 
 ## 📚 API Documentation
@@ -340,33 +340,63 @@ src/main/java/gr/aueb/cf/grandmasfurnitureapp/
 ### Frontend Structure
 ```
 src/
-├── api/                     # API functions, types, and schemas
+├── api/                     # API functions and service calls
 │   ├── ads.ts              # Ad-related API calls
-│   ├── auth.ts             # Authentication API
-│   ├── users.ts            # User management API
-│   └── types.ts            # Shared type definitions
+│   ├── login.ts            # Authentication API calls
+│   ├── registration.ts     # User registration API calls
+│   └── users.ts            # User management API calls
 ├── assets/                  # Static assets (images, icons, SVGs)
+│   ├── furniturelogin.svg  # Login page illustration
+│   ├── grandawaving.svg    # Waving grandma illustration
+│   ├── grandmabroom.svg    # Broom illustration
+│   ├── grandmacleaningtable.svg # Cleaning table illustration
+│   ├── grandmaflowers.svg  # Flowers illustration
+│   ├── grandmalogo.svg     # Application logo
+│   ├── grandmamirror.svg   # Mirror illustration
+│   └── grandmasitting.svg  # Sitting illustration
 ├── components/              # Reusable UI components
 │   ├── ads/                # Ad-related components
-│   │   ├── AdRowCard.tsx   # Individual ad display
-│   │   ├── AdsTable.tsx    # Paginated ads table
-│   │   └── AdForm.tsx      # Create/edit ad form
+│   │   ├── AdRowCard.tsx   # Individual ad display card
+│   │   └── AdsTable.tsx    # Paginated ads table
 │   ├── ui/                 # shadcn/ui components
+│   │   ├── alert-dialog.tsx # Alert dialog component
+│   │   ├── button.tsx      # UI button component
+│   │   └── sonner.tsx      # Toast notifications
+│   ├── AdminProtectedRoute.tsx # Admin route protection
+│   ├── AuthButton.tsx      # Authentication button
 │   ├── Button.tsx          # Custom button component
+│   ├── Footer.tsx          # Application footer
+│   ├── GrandmaLogo.tsx     # Logo component
 │   ├── Header.tsx          # Navigation header
-│   └── Layout.tsx          # Page layout wrapper
+│   ├── Input.tsx           # Form input component
+│   ├── Label.tsx           # Form label component
+│   ├── Layout.tsx          # Page layout wrapper
+│   ├── Pagination.tsx      # Pagination component
+│   └── ProtectedRoute.tsx  # Route protection component
+├── config/                  # Configuration files
+│   └── constants.ts        # Application constants
 ├── context/                 # React context providers
 │   ├── AuthContext.ts      # Authentication state
 │   └── AuthProvider.tsx    # Auth provider component
 ├── hooks/                   # Custom React hooks
 │   └── useAuth.ts          # Authentication hook
 ├── lib/                     # Utility functions and helpers
+│   ├── cookies.ts          # Cookie management utilities
+│   └── utils.ts            # General utility functions
 ├── pages/                   # Page components
+│   ├── AdDetailedPage.tsx  # Individual ad details page
+│   ├── AdPage.tsx          # Ad creation/editing page
 │   ├── DashboardAdsPage.tsx # Main dashboard with search
-│   ├── AdPage.tsx          # Individual ad view
-│   ├── LoginPage.tsx       # Authentication page
-│   └── UsersPage.tsx       # User management (admin)
-└── App.tsx                  # Main application component
+│   ├── HomePage.tsx        # Application home page
+│   ├── LoginPage.tsx       # User authentication page
+│   ├── LogoutPage.tsx      # Logout confirmation page
+│   ├── NotFoundPage.tsx    # 404 error page
+│   ├── RegistrationPage.tsx # User registration page
+│   └── UsersPage.tsx       # User management (admin only)
+├── App.tsx                  # Main application component
+├── index.css               # Global styles
+├── main.tsx                # Application entry point
+└── vite-env.d.ts           # Vite environment types
 ```
 
 ## 🔧 Configuration
