@@ -346,14 +346,6 @@ src/
 │   ├── registration.ts     # User registration API calls
 │   └── users.ts            # User management API calls
 ├── assets/                  # Static assets (images, icons, SVGs)
-│   ├── furniturelogin.svg  # Login page illustration
-│   ├── grandawaving.svg    # Waving grandma illustration
-│   ├── grandmabroom.svg    # Broom illustration
-│   ├── grandmacleaningtable.svg # Cleaning table illustration
-│   ├── grandmaflowers.svg  # Flowers illustration
-│   ├── grandmalogo.svg     # Application logo
-│   ├── grandmamirror.svg   # Mirror illustration
-│   └── grandmasitting.svg  # Sitting illustration
 ├── components/              # Reusable UI components
 │   ├── ads/                # Ad-related components
 │   │   ├── AdRowCard.tsx   # Individual ad display card
